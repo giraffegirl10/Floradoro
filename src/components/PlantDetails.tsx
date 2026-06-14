@@ -1,7 +1,12 @@
 import { Card, CardContent, CardHeader, Typography } from "@mui/material";
+import PlantImage from "./PlantImage";
+import type { Plant } from "../types/plant";
 
-type PlantDetailsProps = { open?: boolean };
-export default function PlantDetails({ open }: PlantDetailsProps) {
+type PlantDetailsProps = { open?: boolean; selectedPlant: Plant | undefined };
+export default function PlantDetails({
+  open,
+  selectedPlant,
+}: PlantDetailsProps) {
   return (
     <Card
       variant="outlined"
@@ -26,7 +31,11 @@ export default function PlantDetails({ open }: PlantDetailsProps) {
         }}
       />
       <CardContent>
-        <Typography>Here are the details about the selected plant.</Typography>
+        {selectedPlant ? (
+          <PlantImage plant={selectedPlant} />
+        ) : (
+          <Typography>No plant selected.</Typography>
+        )}
       </CardContent>
     </Card>
   );

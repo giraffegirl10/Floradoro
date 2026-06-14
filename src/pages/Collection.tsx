@@ -8,7 +8,7 @@ import {
   Typography,
   Box,
 } from "@mui/material";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
 import { RARITY_CONFIG } from "../constants";
 import PlantCard from "../components/PlantCard";
@@ -21,30 +21,48 @@ const PLANTS: Plant[] = [
     name: "Cactus Bunny",
     type: "cactus",
     rarity: "common",
+    status: "grown",
   },
   {
     key: "bears-paw",
     name: "Bear's Paw",
     type: "succulent",
     rarity: "rare",
+    status: "grown",
   },
   {
     key: "lily-of-the-valley",
     name: "Lily of the Valley",
     type: "flower",
     rarity: "epic",
+    status: "grown",
   },
   {
     key: "pancake-plant",
     name: "Pancake Plant",
     type: "succulent",
     rarity: "legendary",
+    status: "grown",
   },
 ];
 
+type FilterState = {
+  status?: Plant["status"];
+  type?: Plant["type"];
+  rarity?: Plant["rarity"];
+};
+
 export default function Collection() {
   const [selectedPlant, setSelectedPlant] = useState<Plant>();
-
+  const [filter, setFilter] = useState<FilterState>({});
+  const visiblePlants = useMemo(() => {
+    return PLANTS.filter((plant) => {
+      const matchesStatus = !filter.status || plant.status === filter.status;
+      const matchesType = !filter.type || plant.type === filter.type;
+      const matchesRarity = !filter.rarity || plant.rarity === filter.rarity;
+      return matchesStatus && matchesType && matchesRarity;
+    });
+  }, [filter]);
   return (
     <Stack
       direction={{ xs: "column", lg: "row" }}
@@ -68,10 +86,13 @@ export default function Collection() {
               <Stack>
                 <Typography>Status</Typography>
                 <ToggleButtonGroup
+                  onChange={(_, value) =>
+                    setFilter((prev) => ({ ...prev, status: value }))
+                  }
                   size="small"
                   color="primary"
                   exclusive
-                  value="wilted"
+                  value={filter.status}
                 >
                   <ToggleButton value="grown">Grown</ToggleButton>
                   <ToggleButton value="wilted">Wilted</ToggleButton>
@@ -81,10 +102,13 @@ export default function Collection() {
               <Stack>
                 <Typography>Type</Typography>
                 <ToggleButtonGroup
+                  onChange={(_, value) =>
+                    setFilter((prev) => ({ ...prev, type: value }))
+                  }
                   size="small"
                   color="primary"
                   exclusive
-                  value="flower"
+                  value={filter.type}
                 >
                   <ToggleButton value="cactus">Cactus</ToggleButton>
                   <ToggleButton value="succulent">Succulent</ToggleButton>
@@ -94,7 +118,10 @@ export default function Collection() {
               <Stack>
                 <Typography>Rarity</Typography>
                 <ToggleButtonGroup
-                  value={"epic"}
+                  onChange={(_, value) =>
+                    setFilter((prev) => ({ ...prev, rarity: value }))
+                  }
+                  value={filter.rarity}
                   exclusive
                   aria-label="item rarity"
                   size="small"
@@ -145,7 +172,7 @@ export default function Collection() {
               gap: 1.5,
             }}
           >
-            {[...PLANTS, ...PLANTS, ...PLANTS].map((plant) => {
+            {visiblePlants.map((plant) => {
               return (
                 <PlantCard
                   key={plant.key}
@@ -159,7 +186,7 @@ export default function Collection() {
           </Box>
         </CardContent>
       </Card>
-      <PlantDetailsDrawer />
+      <PlantDetailsDrawer selectedPlant={selectedPlant} />
     </Stack>
   );
 }
