@@ -35,6 +35,9 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
   open?: boolean;
 }>(({ theme }) => ({
   flexGrow: 1,
+  width: "100%",
+  height: `calc(100vh - 64px)`,
+  boxSizing: "border-box",
   padding: theme.spacing(3),
   transition: theme.transitions.create("margin", {
     easing: theme.transitions.easing.sharp,
@@ -103,7 +106,7 @@ export default function PersistentDrawerLeft() {
   };
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex", height: "100%" }}>
       <AppBar position="fixed" open={open}>
         <Toolbar>
           <IconButton

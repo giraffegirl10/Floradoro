@@ -53,11 +53,24 @@ function App() {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        minHeight: "100vh",
         width: "100%",
+        flexGrow: 1,
+        backgroundImage: "url('/greenhouse.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        height: "100%",
       }}
     >
-      <Card sx={{ p: 2, minWidth: 450 }} variant="outlined">
+      {/* <img
+        src="/greenhouse.png"
+        alt="Greenhouse"
+        style={{ width: "100%", height: "auto" }}
+      /> */}
+      <Card
+        sx={{ p: 2, minWidth: 450, bottom: 24, right: 24, position: "fixed" }}
+        variant="outlined"
+      >
         <CardHeader
           title="Pomodoro"
           action={

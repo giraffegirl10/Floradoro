@@ -14,6 +14,7 @@ import Store from "./pages/Store.tsx";
 import Login from "./pages/Login.tsx";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "./config/theme.ts";
+import "./App.css";
 
 const router = createBrowserRouter([
   {
